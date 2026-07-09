@@ -99,9 +99,9 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": [],
+            "dont-discover": [ ],
             "installer": {
-                "post-create-project": []
+                "post-create-project": [ ]
             }
         }
     },

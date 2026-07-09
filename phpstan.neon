@@ -9,5 +9,9 @@ parameters:
         - config/
         - database/
         - routes/
+        - modules/*/app/
+        - modules/*/config/
+        - modules/*/database/
+        - modules/*/routes/
 
     level: 7
