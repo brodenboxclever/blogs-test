@@ -17,9 +17,11 @@ withDefaults(defineProps<Props>(), {
 <template>
     <AppShell variant="header">
         <AppHeader :breadcrumbs="breadcrumbs" />
+
         <AppContent variant="header">
             <slot />
         </AppContent>
+
         <Toaster />
     </AppShell>
 </template>
