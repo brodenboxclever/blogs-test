@@ -7,7 +7,7 @@ defineOptions({
         breadcrumbs: [
             {
                 title: 'Blogs',
-                href: blogs.index(),
+                href: blogs.blog.index(),
             },
         ],
     },

@@ -7,6 +7,7 @@ import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
+import blogs from '@/routes/blogs';
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
@@ -14,6 +15,11 @@ const mainNavItems: NavItem[] = [
         title: 'Dashboard',
         href: dashboard(),
         icon: LayoutGrid,
+    },
+    {
+        title: 'Blogs',
+        href: blogs.blog.index(),
+        icon: RssIcon,
     },
 ];
 
