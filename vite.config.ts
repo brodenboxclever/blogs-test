@@ -86,4 +86,17 @@ export default defineConfig({
             'modules/**/routes/**/*.php',
         ])
     ],
+
+    // Bundle up all vendor files into a single file which can be cached for a long time.
+    build: {
+        rollupOptions: {
+            output: {
+                manualChunks(id) {
+                    if (id.includes('node_modules')) {
+                        return 'vendor';
+                    }
+                },
+            },
+        },
+    },
 });
