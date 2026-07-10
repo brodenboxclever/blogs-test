@@ -34,12 +34,17 @@
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/"
+            "Database\\Seeders\\": "database/seeders/",
+
+            "Modules\\Blogs\\": "modules/Blogs/app/",
+            "Modules\\Blogs\\Database\\Factories\\": "modules/Blogs/database/factories/",
+            "Modules\\Blogs\\Database\\Seeders\\": "modules/Blogs/database/seeders/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Tests\\": "tests/",
+            "Modules\\Blogs\\Tests\\": "modules/Blogs/tests/"
         }
     },
     "scripts": {
