@@ -39,13 +39,18 @@
 
             "Modules\\Blogs\\": "modules/Blogs/app/",
             "Modules\\Blogs\\Database\\Factories\\": "modules/Blogs/database/factories/",
-            "Modules\\Blogs\\Database\\Seeders\\": "modules/Blogs/database/seeders/"
+            "Modules\\Blogs\\Database\\Seeders\\": "modules/Blogs/database/seeders/",
+
+            "Modules\\Pages\\": "modules/Pages/app/",
+            "Modules\\Pages\\Database\\Factories\\": "modules/Pages/database/factories/",
+            "Modules\\Pages\\Database\\Seeders\\": "modules/Pages/database/seeders/"
         }
     },
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/",
-            "Modules\\Blogs\\Tests\\": "modules/Blogs/tests/"
+            "Modules\\Blogs\\Tests\\": "modules/Blogs/tests/",
+            "Modules\\Pages\\Tests\\": "modules/Pages/tests/"
         }
     },
     "scripts": {
