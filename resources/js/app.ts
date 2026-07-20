@@ -1,4 +1,4 @@
-import { createInertiaApp } from '@inertiajs/vue3';
+import { createInertiaApp, Head, Link } from '@inertiajs/vue3';
 import { initializeTheme } from '@/composables/useAppearance';
 import AppLayout from '@/layouts/AppLayout.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
@@ -20,6 +20,11 @@ createInertiaApp({
             default:
                 return AppLayout;
         }
+    },
+    withApp(app) {
+        app.component('Link', Link);
+        app.component('AppLayout', AppLayout);
+        app.component('Head', Head);
     },
     progress: {
         color: '#4B5563',
