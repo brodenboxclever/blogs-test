@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -38,10 +39,58 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'name' => config('app.name'),
+            'title' => $this->_generate_default_title(),
             'auth' => [
                 'user' => $request->user(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
+    }
+
+    /**
+     * Create a fallback title for the inertia payload based on the module, controller and method names.
+     *
+     * For example:
+     * `Modules\Pages\Http\Controllers\PageController::index` => *Page listings*
+     * `Modules\Blogs\Http\Controllers\BlogController::create` => *Create Blog*
+     * `Modules\Blogs\Http\Controllers\BlogPostController::edit` => *Manage Blog Post*
+     * `Modules\Foo\Http\Controllers\BarController::baz` => *Foo Bar Baz*
+     */
+    private function _generate_default_title(): string
+    {
+        $controllerName = request()->route()?->getControllerClass();
+        $methodName = request()->route()?->getActionMethod();
+        preg_match('/^Modules\\\\([^\\\\]+)\\\\(.+)$/', $controllerName, $matches);
+        $moduleName = $matches[1] ?? false;
+
+        // i.e. "Blog"
+        $moduleTitle = Str::of($moduleName)
+            ->singular()
+            ->headline()
+            ->toString();
+
+        // i.e. "Blog Post"
+        $modelTitle = Str::of(class_basename($controllerName))
+            ->after($moduleTitle)
+            ->beforeLast('Controller')
+            ->singular()
+            ->headline()
+            ->toString();
+
+        if ($modelTitle !== $moduleTitle) {
+            $moduleTitle .= ' '.$modelTitle;
+        }
+
+        $defaultTitle = '';
+        if ($moduleName) {
+            $defaultTitle = match ($methodName) {
+                'create' => 'Create '.$moduleTitle,
+                'edit' => 'Manage '.$moduleTitle,
+                'index' => $moduleTitle.' Listings',
+                default => Str::of($moduleName.' '.$methodName)->headline()->trim(),
+            };
+        }
+
+        return $defaultTitle;
     }
 }
