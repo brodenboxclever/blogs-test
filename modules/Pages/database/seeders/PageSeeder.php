@@ -2,8 +2,8 @@
 
 namespace Modules\Pages\Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Modules\Pages\Models\Page;
 
 class PageSeeder extends Seeder
 {
@@ -12,6 +12,10 @@ class PageSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        Page::factory(5)->create();
+        Page::factory(5)->child()->create();
+        Page::factory(5)->child()->create();
+        Page::factory(5)->child()->create();
+        Page::factory(5)->child()->create();
     }
 }

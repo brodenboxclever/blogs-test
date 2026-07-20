@@ -2,12 +2,15 @@
 
 namespace App\Providers;
 
+use App\Models\User;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configureModels();
         $this->configureDefaults();
+        $this->configureBlueprintMacros();
         $this->configureFactoryNameResolvers();
     }
 
@@ -63,6 +67,38 @@ class AppServiceProvider extends ServiceProvider
     {
         Model::shouldBeStrict();
         Model::automaticallyEagerLoadRelationships();
+    }
+
+    protected function configureBlueprintMacros(): void
+    {
+        Blueprint::macro('openGraphs', function () {
+            $this->string('og_title')->nullable();
+            $this->string('og_description')->nullable();
+            $this->string('og_image')->nullable();
+            $this->string('og_image_alt')->nullable();
+        });
+
+        Blueprint::macro('slug', function (string $column = 'slug') {
+            return $this->string('slug')->unique();
+        });
+
+        Blueprint::macro('image', function (string $column = 'image') {
+            $image = $this->string($column);
+            $this->string($column.'_alt')->nullable();
+
+            return $image;
+        });
+
+        Blueprint::macro('readonly', function () {
+            $this->boolean('is_readonly')->default(false)->comment('Whether the record is prevented from any further updates.');
+            $this->foreignIdFor(User::class, 'readonly_by')->nullable()->comment('The user who marked the record as readonly.');
+            $this->string('readonly_at')->nullable()->comment('The datetime when the record was marked as readonly.');
+            $this->string('readonly_reason')->nullable();
+        });
+
+        Blueprint::macro('order', function ($column = 'order') {
+            return $this->tinyInteger($column, unsigned: true)->nullable();
+        });
     }
 
     /**
