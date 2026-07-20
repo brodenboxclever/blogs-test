@@ -29,6 +29,7 @@ yarn-error.log
 /.zed
 
 # Laravel Boost
+skills-lock.json
 *.mcp.json
 /CLAUDE.md
 /.agents
