@@ -18,7 +18,6 @@ return new class extends Migration
             $table->foreignIdFor(Page::class)->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
 
             $table->string('title');
-            $table->slug();
 
             $table->image()->nullable();
 

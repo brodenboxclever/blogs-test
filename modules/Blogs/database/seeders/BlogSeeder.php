@@ -3,6 +3,7 @@
 namespace Modules\Blogs\Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Modules\Blogs\Models\Blog;
 
 class BlogSeeder extends Seeder
 {
@@ -11,6 +12,6 @@ class BlogSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        Blog::factory(20)->create();
     }
 }

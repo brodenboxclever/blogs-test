@@ -14,7 +14,11 @@ class BlogController extends Controller
      */
     public function index()
     {
-        return inertia('Blogs');
+        $blogs = Blog::paginate(10)->toResourceCollection();
+
+        return inertia('Blogs/Index', [
+            'blogs' => $blogs,
+        ]);
     }
 
     /**
