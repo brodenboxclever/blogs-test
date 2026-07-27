@@ -81,9 +81,11 @@ export default defineConfig({
         }),
 
         // Custom plugin automatically keeps ziggy in sync with changes to routes
-        execOnChange('wayfinder:generate', 'php artisan wayfinder:generate', [
+        execOnChange('wayfinder:generate', 'php artisan wayfinder:generate --with-form', [
             'routes/**/*.php',
             'modules/**/routes/**/*.php',
+            'modules/**/routes/**/*.php',
+            'modules/**/app/Models/*.php'
         ])
     ],
 
