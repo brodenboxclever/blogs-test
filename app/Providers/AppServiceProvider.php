@@ -79,7 +79,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Blueprint::macro('slug', function (string $column = 'slug') {
-            return $this->string('slug')->unique();
+            return $this->string('slug');
         });
 
         Blueprint::macro('image', function (string $column = 'image') {

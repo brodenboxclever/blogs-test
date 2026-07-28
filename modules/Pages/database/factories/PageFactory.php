@@ -47,6 +47,13 @@ class PageFactory extends Factory
         ]);
     }
 
+    public function childOf(Page $page)
+    {
+        return $this->state(fn (array $attributes) => [
+            'parent_id' => $page->id,
+        ]);
+    }
+
     public function readonly()
     {
         return $this->state(fn (array $attributes) => [
