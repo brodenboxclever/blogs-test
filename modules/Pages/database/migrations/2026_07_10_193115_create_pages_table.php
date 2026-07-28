@@ -36,6 +36,8 @@ return new class extends Migration
             $table->softDeletes();
 
             $table->timestamps();
+
+            $table->unique(['parent_id', 'slug']);
         });
     }
 

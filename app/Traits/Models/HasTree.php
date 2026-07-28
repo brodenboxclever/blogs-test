@@ -2,7 +2,6 @@
 
 namespace App\Traits\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -20,9 +19,16 @@ use Illuminate\Validation\ValidationException;
  *
  * @mixin Model
  */
-#[Hidden(['_cte_chain'])]
 trait HasTree
 {
+    /**
+     * Hide the internal CTE chain column from array/JSON output.
+     */
+    public function initializeHasTree(): void
+    {
+        $this->hidden[] = '_cte_chain';
+    }
+
     /**
      * Get the name of the slug key column to use for path generation.
      */
@@ -94,6 +100,13 @@ trait HasTree
         $primaryKey = $this->getKeyName();
         $parentKey = $this->getParentKeyName();
 
+        $rootSoftDelete = $childSoftDelete = '';
+        if (method_exists($this, 'getDeletedAtColumn')) {
+            $deletedAtKey = $this->getDeletedAtColumn();
+            $rootSoftDelete = "AND {$deletedAtKey} IS NULL";
+            $childSoftDelete = "AND p.{$deletedAtKey} IS NULL";
+        }
+
         $cte = <<<SQL
             WITH RECURSIVE page_tree AS (
                 -- Root level items
@@ -102,7 +115,9 @@ trait HasTree
                     CONCAT('/', CAST({$slugKey} AS CHAR(1000))) AS path,
                     CAST(CONCAT('/', {$primaryKey}, '/') AS CHAR(1000)) AS _cte_chain
                 FROM {$table}
-                WHERE {$parentKey} IS NULL
+                WHERE
+                    {$parentKey} IS NULL
+                    {$rootSoftDelete}
 
                 UNION ALL
 
@@ -115,7 +130,9 @@ trait HasTree
                 INNER JOIN page_tree pt ON p.{$parentKey} = pt.{$primaryKey}
 
                 -- Stop recursion if child ID already exists in the chain
-                WHERE INSTR(pt._cte_chain, CONCAT('/', p.{$primaryKey}, '/')) = 0
+                WHERE
+                    INSTR(pt._cte_chain, CONCAT('/', p.{$primaryKey}, '/')) = 0
+                    {$childSoftDelete}
             )
         SQL;
 
@@ -132,13 +149,14 @@ trait HasTree
         $table = $this->getTable();
         $primaryKey = $this->getKeyName();
         $parentKey = $this->getParentKeyName();
+        $slugKey = $this->getSlugKeyName();
 
         $cte = <<<SQL
             WITH RECURSIVE page_tree AS (
                 -- Root parent item
                 SELECT
                     *,
-                    CONCAT('/', CAST(slug AS CHAR(1000))) AS path,
+                    CONCAT('/', CAST({$slugKey} AS CHAR(1000))) AS path,
                     CAST(CONCAT('/', {$primaryKey}, '/') AS CHAR(1000)) AS _cte_chain
                 FROM {$table}
                 WHERE {$primaryKey} = {$parentId}
@@ -148,7 +166,7 @@ trait HasTree
                 -- Nested child items
                 SELECT
                     p.*,
-                    CONCAT(pt.path, '/', p.slug) AS path,
+                    CONCAT(pt.path, '/', p.{$slugKey}) AS path,
                     CONCAT(pt._cte_chain, p.{$primaryKey}, '/') AS _cte_chain
                 FROM {$table} p
                 INNER JOIN page_tree pt ON p.{$parentKey} = pt.{$primaryKey}
@@ -198,7 +216,7 @@ trait HasTree
         SQL;
 
         return $query
-            ->fromRaw("({$cte} SELECT * FROM page_tree WHERE {$primaryKey} != {$modelId}) as {$table}")
+            ->fromRaw("({$cte} SELECT * FROM page_tree WHERE {$primaryKey} != {$modelId}) as {$table} ORDER BY LENGTH(_cte_chain)")
             ->select("{$table}.*");
     }
 
@@ -222,17 +240,19 @@ trait HasTree
         $parentKey = $instance->getParentKeyName();
         $primaryKey = $instance->getKeyName();
 
-        return $models
-            ->where($parentKey, $parentId)
-            ->map(function (Model $model) use ($models, $primaryKey) {
-                $model->setRelation(
-                    'children',
-                    static::buildTree($models, $model->getAttribute($primaryKey))
-                );
+        $grouped = $models->groupBy($parentKey);
 
-                return $model;
-            })
-            ->values();
+        $build = function ($parentId) use (&$build, $grouped, $primaryKey) {
+            return ($grouped->get($parentId) ?? collect())
+                ->map(function (Model $model) use ($build, $primaryKey) {
+                    $model->setRelation('children', $build($model->getAttribute($primaryKey)));
+
+                    return $model;
+                })
+                ->values();
+        };
+
+        return $build($parentId);
     }
 
     /**
@@ -275,7 +295,7 @@ trait HasTree
         $slugValue = $this->getAttribute($slugKey);
 
         // For root nodes we can simply return the slug.
-        if (! $this->getAttribute($parentKey) && ! $this->getAttribute($slugKey)) {
+        if (! $this->getAttribute($parentKey) && $slugValue) {
             return '/'.$slugValue;
         }
 
