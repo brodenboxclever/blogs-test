@@ -43,14 +43,7 @@ class PageFactory extends Factory
     public function child()
     {
         return $this->state(fn (array $attributes) => [
-            'parent_id' => Page::inRandomOrder()->value('id'),
-        ]);
-    }
-
-    public function childOf(Page $page)
-    {
-        return $this->state(fn (array $attributes) => [
-            'parent_id' => $page->id,
+            'parent_id' => Page::factory(),
         ]);
     }
 
@@ -58,7 +51,7 @@ class PageFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'is_readonly' => true,
-            'readonly_by' => User::inRandomOrder()->value('id'),
+            'readonly_by' => User::factory(),
             'readonly_at' => fake()->datetime(),
             'readonly_reason' => fake()->optional(80)->sentence(1),
         ]);

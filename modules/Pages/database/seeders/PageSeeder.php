@@ -2,6 +2,7 @@
 
 namespace Modules\Pages\Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Modules\Pages\Models\Page;
 
@@ -12,10 +13,12 @@ class PageSeeder extends Seeder
      */
     public function run(): void
     {
-        Page::factory(5)->create();
-        Page::factory(5)->child()->create();
-        Page::factory(5)->child()->create();
-        Page::factory(5)->child()->create();
-        Page::factory(5)->child()->create();
+        $first = Page::factory(5)->create();
+        $second = Page::factory(5)->recycle($first)->child()->create();
+        $third = Page::factory(5)->recycle($second)->child()->create();
+        $forth = Page::factory(5)->recycle($third)->child()->create();
+        $fifth = Page::factory(5)->recycle($forth)->child()->create();
+
+        Page::factory(1)->recycle(User::all())->readonly()->create();
     }
 }
