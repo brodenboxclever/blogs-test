@@ -16,7 +16,7 @@ defineOptions({
 
 <template>
     <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-        <ThePages :pages="$page.props.pages.data" />
+        <ThePages :pages="$page.props.pages" />
 
         <!-- <Pagination :links="$page.props.pages.meta.links" /> -->
     </div>

@@ -35,8 +35,9 @@ class PageResource extends JsonResource
             'readonly_reason' => $this->readonly_reason,
             'order' => $this->order,
             'deleted_at' => $this->deleted_at?->format('l, F jS Y, g:i A'),
-            'path' => '/'.$this->path,
+            'path' => $this->path,
             'depth' => $this->depth,
+            'children' => PageResource::collection($this->children),
             'created_at' => $this->created_at->format('l, F jS Y, g:i A'),
             'updated_at' => $this->updated_at->format('l, F jS Y, g:i A'),
         ];

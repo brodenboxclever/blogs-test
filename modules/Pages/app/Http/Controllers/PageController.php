@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Modules\Pages\Http\Requests\StorePageRequest;
 use Modules\Pages\Http\Requests\UpdatePageRequest;
+use Modules\Pages\Http\Resources\PageResource;
 use Modules\Pages\Models\Page;
 
 class PageController extends Controller
@@ -15,10 +16,10 @@ class PageController extends Controller
      */
     public function index(Request $request)
     {
-        $tree = Page::tree()->depthFirst()->get()->toResourceCollection();
+        $tree = Page::tree()->get()->toTree();
 
         return inertia('Pages/Index', [
-            'pages' => $tree,
+            'pages' => PageResource::collection($tree),
         ]);
     }
 
