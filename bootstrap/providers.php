@@ -2,6 +2,7 @@
 
 use App\Providers\AppServiceProvider;
 use App\Providers\BlueprintServiceProvider;
+use App\Providers\FakerServiceProvider;
 use App\Providers\FortifyServiceProvider;
 use Modules\Blogs\Providers\BlogServiceProvider;
 use Modules\Pages\Providers\PageServiceProvider;
@@ -10,6 +11,7 @@ return [
     AppServiceProvider::class,
     FortifyServiceProvider::class,
     BlueprintServiceProvider::class,
+    FakerServiceProvider::class,
     PageServiceProvider::class,
     BlogServiceProvider::class,
 ];
