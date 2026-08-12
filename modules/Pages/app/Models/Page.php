@@ -16,6 +16,10 @@ class Page extends Model
 
     protected $hidden = ['_cte_chain'];
 
+    protected $casts = [
+        'readonly_at' => 'datetime',
+    ];
+
     /** @use HasFactory<PageFactory> */
     use HasFactory;
 
