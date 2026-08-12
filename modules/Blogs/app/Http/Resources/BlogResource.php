@@ -21,19 +21,10 @@ class BlogResource extends JsonResource
             'image' => $this->image,
             'image_alt' => $this->image_alt,
             'is_readonly' => $this->is_readonly,
-            'page' => $this->page ? [
-                // 'id' => $this->page?->uuid,
-                // 'uuid' => $this->page?->uuid,
-                // 'path' => $this->page?->getPath(),
-                // 'title' => $this->page?->title,
-            ] : null,
-            // 'readonly_by' => $this->readonly_by->name,
-            'readonly_at' => $this->readonly_at?->format('F jS Y, g:i A'),
-            'readonly_reason' => $this->readonly_reason,
             'order' => $this->order,
-            'deleted_at' => $this->deleted_at?->format('F jS Y, g:i A'),
-            'created_at' => $this->created_at->format('F jS Y, g:i A'),
-            'updated_at' => $this->updated_at->format('F jS Y, g:i A'),
+            'deleted_at' => $this->deleted_at?->format('M j Y, g:i A'),
+            'created_at' => $this->created_at->format('M j Y, g:i A'),
+            'updated_at' => $this->updated_at->format('M j Y, g:i A'),
         ];
     }
 }

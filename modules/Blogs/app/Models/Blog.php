@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Blogs\Database\Factories\BlogFactory;
-use Modules\Pages\Models\Page;
 
 class Blog extends Model
 {
@@ -17,11 +16,6 @@ class Blog extends Model
 
     use HasNonPrimaryUuid;
     use Prunable, SoftDeletes;
-
-    public function page()
-    {
-        return $this->belongsTo(Page::class);
-    }
 
     /**
      * Get the prunable model query.

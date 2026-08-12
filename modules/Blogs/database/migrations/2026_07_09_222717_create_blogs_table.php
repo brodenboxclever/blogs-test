@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Modules\Pages\Models\Page;
 
 return new class extends Migration
 {
@@ -15,7 +14,6 @@ return new class extends Migration
         Schema::create('blogs', function (Blueprint $table): void {
             $table->id();
             $table->uuid()->unique();
-            $table->foreignIdFor(Page::class)->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
 
             $table->string('title');
 
