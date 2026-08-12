@@ -31,15 +31,15 @@ class PageResource extends JsonResource
             'is_indexable' => $this->is_indexable,
             'is_readonly' => $this->is_readonly,
             // 'readonly_by' => $this->readonly_by,
-            'readonly_at' => $this->readonly_at?->format('l, F jS Y, g:i A'),
+            'readonly_at' => $this->readonly_at?->format('M j Y, g:i A'),
             'readonly_reason' => $this->readonly_reason,
             'order' => $this->order,
-            'deleted_at' => $this->deleted_at?->format('l, F jS Y, g:i A'),
+            'deleted_at' => $this->deleted_at?->format('M j Y, g:i A'),
             'path' => $this->path,
             'depth' => $this->depth,
             'children' => PageResource::collection($this->children),
-            'created_at' => $this->created_at->format('l, F jS Y, g:i A'),
-            'updated_at' => $this->updated_at->format('l, F jS Y, g:i A'),
+            'created_at' => $this->created_at->format('M j Y, g:i A'),
+            'updated_at' => $this->updated_at->format('M j Y, g:i A'),
         ];
     }
 }

@@ -15,9 +15,9 @@ const { page } = defineProps<{
     <template v-if="page">
         <tr>
             <td>
-                <div :style="'padding-left: ' + (page.depth * 15) + 'px'">
+                <div class="flex flex-col w-full" :style="'padding-left: ' + (page.depth * 15) + 'px'">
                     <Link class="link link-hover link-primary" :href="edit(page.uuid)"><b>{{ page.title }}</b></Link>
-                    <code class="block text-xs text-base-content/50">{{ page.path }}</code>
+                    <code class="min-w-full w-0 block text-xs text-base-content/50 truncate">/{{ page.path }}</code>
                 </div>
             </td>
 
