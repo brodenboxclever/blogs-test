@@ -9,6 +9,7 @@ class Html extends Base
     /**
      * Generates a realistic rich text HTML string.
      *
+     * @param  int  $minTags  The minimum number of top-level HTML tags to generate.
      * @param  int  $maxTags  The maximum number of top-level HTML tags to generate.
      */
     public function html(int $minTags = 6, int $maxTags = 12): string
@@ -16,8 +17,10 @@ class Html extends Base
         // Always start with a Title (h1 or h2)
         $html = '<h2>'.fake()->sentence().'</h2>'.PHP_EOL;
 
+        $tagCount = static::numberBetween(min($minTags, $maxTags), max($minTags, $maxTags));
+
         // Generate the remaining tags up to the maximum
-        for ($i = 1; $i < rand($minTags, $maxTags); $i++) {
+        for ($i = 1; $i < $tagCount; $i++) {
             $type = $this->getRichTextTag();
 
             $html .= match ($type) {

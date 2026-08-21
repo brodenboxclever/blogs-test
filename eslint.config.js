@@ -110,18 +110,6 @@ export default defineConfigWithVueTs(
         },
     }),
 
-    // Unused imports
-    {
-        plugins: {
-            'unused-imports': unusedImports,
-        },
-        rules: {
-            'no-unused-vars': 'off', // or "@typescript-eslint/no-unused-vars": "off",
-            'unused-imports/no-unused-imports': 'warn',
-            'unused-imports/no-unused-vars': ['warn'],
-        },
-    },
-
     // Vue
     ...vue.configs['flat/recommended'],
     {
@@ -132,6 +120,7 @@ export default defineConfigWithVueTs(
               // allow in order to escape HTML entities
             'vue/no-v-text-v-html-on-component': 'off',
             'vue/no-v-html': 'off',
+            'vue/valid-template-root': 'off',
 
             'vue/block-lang': 'off',
             'vue/multi-word-component-names': 'off',
@@ -204,6 +193,18 @@ export default defineConfigWithVueTs(
                 htmlElementCaseSensitive: true,
             }],
 
+        },
+    },
+
+    // Unused imports
+    {
+        plugins: {
+            'unused-imports': unusedImports,
+        },
+        rules: {
+            'no-unused-vars': 'off', // or "@typescript-eslint/no-unused-vars": "off",
+            'unused-imports/no-unused-imports': 'warn',
+            'unused-imports/no-unused-vars': ['warn'],
         },
     },
 );

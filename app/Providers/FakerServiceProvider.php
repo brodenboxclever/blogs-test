@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use App\Faker\Provider\Html;
+use App\Faker\Provider\Image;
 use Faker\Generator;
-use Faker\Provider\Image;
 use Illuminate\Support\ServiceProvider;
 
 class FakerServiceProvider extends ServiceProvider
@@ -16,8 +16,8 @@ class FakerServiceProvider extends ServiceProvider
     {
         if (class_exists(Generator::class)) {
             $this->app->extend(Generator::class, function (Generator $generator, $app) {
-                fake()->addProvider(new Html(fake()));
-                fake()->addProvider(new Image(fake()));
+                $generator->addProvider(new Html($generator));
+                $generator->addProvider(new Image($generator));
 
                 return $generator;
             });

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\Blogs\Http\Controllers;
 
-use App\Http\Requests\StoreCommentRequest;
-use App\Http\Requests\UpdateCommentRequest;
-use App\Models\Comment;
+use Modules\Blogs\Http\Requests\StoreCommentRequest;
+use Modules\Blogs\Http\Requests\UpdateCommentRequest;
+use Modules\Blogs\Models\Comment;
 
 class CommentController extends Controller
 {

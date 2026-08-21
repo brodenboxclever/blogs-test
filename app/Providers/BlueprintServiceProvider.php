@@ -42,7 +42,7 @@ class BlueprintServiceProvider extends ServiceProvider
         });
 
         Blueprint::macro('slug', function (string $column = 'slug') {
-            return $this->string('slug');
+            return $this->string($column);
         });
 
         Blueprint::macro('image', function (string $column = 'image') {
@@ -55,7 +55,7 @@ class BlueprintServiceProvider extends ServiceProvider
         Blueprint::macro('readonly', function () {
             $this->boolean('is_readonly')->default(false)->comment('Whether the record is prevented from any further updates.');
             $this->foreignIdFor(User::class, 'readonly_by')->nullable()->comment('The user who marked the record as readonly.');
-            $this->string('readonly_at')->nullable()->comment('The datetime when the record was marked as readonly.');
+            $this->timestamp('readonly_at')->nullable()->comment('The datetime when the record was marked as readonly.');
             $this->string('readonly_reason')->nullable();
         });
 

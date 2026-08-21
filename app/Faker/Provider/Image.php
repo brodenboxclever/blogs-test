@@ -1,6 +1,6 @@
 <?php
 
-namespace Xvladqt\Faker;
+namespace App\Faker\Provider;
 
 use Faker\Provider\Base;
 use InvalidArgumentException;
@@ -14,7 +14,7 @@ use RuntimeException;
  * @link http://loremflickr.com/
  * @link https://github.com/xvladqt/Faker-LoremFlickr/blob/master/LoremFlickrProvider.php
  */
-class LoremFlickrProvider extends Base
+class Image extends Base
 {
     /**
      * Generate the URL that will return a random image
@@ -87,6 +87,8 @@ class LoremFlickrProvider extends Base
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_FILE, $fp);
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 15);
             $success = curl_exec($ch) && curl_getinfo($ch, CURLINFO_HTTP_CODE) === 200;
             fclose($fp);
             curl_close($ch);
@@ -95,12 +97,16 @@ class LoremFlickrProvider extends Base
                 unlink($filepath);
 
                 // could not contact the distant URL or HTTP error - fail silently.
-                return false;
+            } elseif (ini_get('allow_url_fopen')) {
+                if (! copy($url, $filepath)) {
+                    @unlink($filepath);
+
+                    return false;
+                }
+            } else {
+                throw new RuntimeException('The image formatter downloads an image from a remote HTTP server. Therefore, it requires that PHP can request remote hosts, either via cURL or fopen()');
             }
-        } elseif (ini_get('allow_url_fopen')) {
-            // use remote fopen() via copy()
-            copy($url, $filepath);
-        } else {
+
             return new RuntimeException('The image formatter downloads an image from a remote HTTP server. Therefore, it requires that PHP can request remote hosts, either via cURL or fopen()');
         }
 

@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Policies;
+namespace Modules\Blogs\Policies;
 
-use App\Models\Comment;
-use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use Modules\Blogs\Models\Comment;
+use Modules\Blogs\Models\User;
 
 class CommentPolicy
 {

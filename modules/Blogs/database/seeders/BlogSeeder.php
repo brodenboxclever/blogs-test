@@ -20,8 +20,9 @@ class BlogSeeder extends Seeder
         Post::factory(2)->recycle($blogs)->past()->create();
 
         $comments = Comment::factory(25)->recycle(Post::all())->create();
-        Comment::factory(5)->unapproved()->recycle(Post::all())->create();
         $replies = Comment::factory(10)->reply()->recycle($comments)->create();
+
         Comment::factory(10)->reply()->recycle($replies)->create();
+        Comment::factory(5)->unapproved()->recycle(Post::all())->create();
     }
 }

@@ -24,4 +24,9 @@ class Blog extends Model
     {
         return static::onlyTrashed()->where('deleted_at', '<=', a_month_ago());
     }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
 }

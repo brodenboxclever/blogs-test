@@ -42,7 +42,11 @@ class BlogController extends Controller
      */
     public function show(Blog $blog)
     {
-        //
+        $blogs = Blog::paginate(10)->toResourceCollection();
+
+        return inertia('Blogs/Show', [
+            'blog' => $blog,
+        ]);
     }
 
     /**
