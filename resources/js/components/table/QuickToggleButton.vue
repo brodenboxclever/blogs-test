@@ -13,9 +13,9 @@ const value = ref(props.value);
 
 const toggle = () => {
     router.patch(props.url, {
-        [props.name]: ! props.value
+        [props.name]: ! value.value
     });
-    value.value = !props.value;
+    value.value = ! value.value;
 };
 
 </script>

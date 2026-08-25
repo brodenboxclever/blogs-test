@@ -25,7 +25,10 @@ const {props} = usePage();
 
 const search = ref(props.filters?.q || '');
 watch(search, debounce((q: string) => {
-    const data = q ? { q } : {};
+    const data: Record<string, string> = q ? { q } : {};
+    data.sort_by = props.filters?.sort_by;
+    data.sort_direction = props.filters?.sort_direction;
+
     router.get(index(), data, {
         preserveState: true,
         replace: true,
