@@ -17,6 +17,13 @@ class Blog extends Model
     use HasNonPrimaryUuid;
     use Prunable, SoftDeletes;
 
+    protected $fillable = ['is_enabled'];
+
+    protected $casts = [
+        'is_enabled' => 'boolean',
+        'is_readonly' => 'boolean',
+    ];
+
     /**
      * Get the prunable model query.
      */

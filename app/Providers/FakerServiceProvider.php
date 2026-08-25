@@ -16,8 +16,8 @@ class FakerServiceProvider extends ServiceProvider
     {
         if (class_exists(Generator::class)) {
             $this->app->extend(Generator::class, function (Generator $generator, $app) {
-                $generator->addProvider(new Html($generator));
-                $generator->addProvider(new Image($generator));
+                fake()->addProvider(new Html(fake()));
+                fake()->addProvider(new Image(fake()));
 
                 return $generator;
             });

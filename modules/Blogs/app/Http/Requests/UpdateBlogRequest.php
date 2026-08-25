@@ -23,7 +23,7 @@ class UpdateBlogRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'is_enabled' => 'required|boolean',
         ];
     }
 }

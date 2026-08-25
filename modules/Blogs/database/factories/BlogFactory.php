@@ -25,6 +25,7 @@ class BlogFactory extends Factory
             'image' => fake()->optional()->imageUrl(800, 600, 'abstract'),
             'image_alt' => fake()->optional()->sentence(3),
             'order' => fake()->optional()->numberBetween(1, 100),
+            'is_enabled' => fake()->boolean(80),
         ];
     }
 

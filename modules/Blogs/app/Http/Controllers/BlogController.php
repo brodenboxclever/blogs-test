@@ -3,6 +3,8 @@
 namespace Modules\Blogs\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Modules\Blogs\Http\Requests\StoreBlogRequest;
 use Modules\Blogs\Http\Requests\UpdateBlogRequest;
 use Modules\Blogs\Models\Blog;
@@ -12,12 +14,30 @@ class BlogController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $blogs = Blog::paginate(10)->toResourceCollection();
+        $filters = $request->validate([
+            'q' => 'nullable|string',
+            'sort_by' => ['nullable', Rule::in(['title', 'created_at', 'order'])],
+            'sort_direction' => ['nullable', Rule::in(['asc', 'desc'])],
+            'per_page' => 'nullable|numeric',
+        ]);
+
+        $searchTerm = $filters['q'] ?? null;
+        $sort = $filters['sort_by'] ?? 'order';
+        $direction = $filters['sort_direction'] ?? 'desc';
+
+        $blogs = Blog::query()
+            ->when($searchTerm, fn ($query, $searchTerm) => $query->whereLike('title', "%{$searchTerm}%"))
+            ->orderBy($sort, $direction)
+            ->orderBy('id', $direction)
+            ->paginate(10)
+            ->withQueryString()
+            ->toResourceCollection();
 
         return inertia('Blogs/Index', [
             'blogs' => $blogs,
+            'filters' => $filters,
         ]);
     }
 
@@ -62,7 +82,9 @@ class BlogController extends Controller
      */
     public function update(UpdateBlogRequest $request, Blog $blog)
     {
-        //
+        $blog->update($request->validated());
+
+        return to_route('blogs.blog.index');
     }
 
     /**

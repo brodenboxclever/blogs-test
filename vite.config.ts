@@ -7,6 +7,7 @@ import { exec } from 'child_process';
 import { bunny } from 'laravel-vite-plugin/fonts';
 import { defineConfig } from 'vite';
 
+
 const execOnChange = (name, command, filesToWatch) => ({
     name,
     configureServer(server) {

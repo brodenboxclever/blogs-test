@@ -23,6 +23,8 @@ return new class extends Migration
 
             $table->order();
 
+            $table->boolean('is_enabled')->default(true);
+
             $table->softDeletes();
 
             $table->timestamps();

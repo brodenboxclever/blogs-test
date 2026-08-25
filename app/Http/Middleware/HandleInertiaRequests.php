@@ -40,6 +40,10 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'name' => config('app.name'),
             'title' => $this->_generate_default_title(),
+            'filters' => [
+                'sort' => null,
+                'direction' => null,
+            ],
             'auth' => [
                 'user' => $request->user(),
             ],

@@ -16,7 +16,7 @@ class PageController extends Controller
      */
     public function index(Request $request)
     {
-        $tree = Page::tree()->get()->toTree();
+        $tree = Page::tree()->depthFirst()->get();
 
         return inertia('Pages/Index', [
             'pages' => PageResource::collection($tree),

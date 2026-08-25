@@ -37,7 +37,6 @@ class PageResource extends JsonResource
             'deleted_at' => $this->deleted_at?->format('M j Y, g:i A'),
             'path' => $this->path,
             'depth' => $this->depth,
-            'children' => PageResource::collection($this->children),
             'created_at' => $this->created_at->format('M j Y, g:i A'),
             'updated_at' => $this->updated_at->format('M j Y, g:i A'),
         ];
