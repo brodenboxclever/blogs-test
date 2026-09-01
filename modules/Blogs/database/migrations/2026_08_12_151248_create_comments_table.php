@@ -1,7 +1,7 @@
 <?php
 
+use App\Providers\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Modules\Blogs\Models\Comment;
 use Modules\Blogs\Models\Post;
