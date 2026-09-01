@@ -18,7 +18,7 @@ class BlogController extends Controller
     {
         $filters = $request->validate([
             'q' => 'nullable|string',
-            'sort_by' => ['nullable', Rule::in(['title', 'created_at', 'order'])],
+            'sort_by' => ['nullable', Rule::in(['title', 'posts_count', 'created_at', 'order'])],
             'sort_direction' => ['nullable', Rule::in(['asc', 'desc'])],
             'per_page' => 'nullable|numeric',
         ]);
@@ -28,6 +28,7 @@ class BlogController extends Controller
         $direction = $filters['sort_direction'] ?? 'desc';
 
         $blogs = Blog::query()
+            ->withCount('posts')
             ->when($searchTerm, fn ($query, $searchTerm) => $query->whereLike('title', "%{$searchTerm}%"))
             ->orderBy($sort, $direction)
             ->orderBy('id', $direction)

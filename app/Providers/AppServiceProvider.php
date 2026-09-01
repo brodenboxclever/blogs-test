@@ -56,6 +56,7 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Configures Eloquent Models to:
      *
+     * - Throw an Exception when accessing a relationship that hasn't been loaded ahead of time.
      * - Throw an Exception when accessing missing attributes
      * - Throw an Exception when filling missing attributes
      * - Detect queries within loops and generate a single query

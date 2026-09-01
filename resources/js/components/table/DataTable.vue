@@ -69,15 +69,15 @@ const sortIndicator = (name) => {
 
 </script>
 <template>
-    <div class="overflow-x-auto rounded-box border border-base-content/5 bg-auto">
-        <table class="table bg-accent border text-accent-foreground w-full min-w-full">
+    <div class="overflow-x-auto rounded-box border border-base-content/5 overflow-x-auto bg-auto">
+        <table class="table bg-accent text-accent-foreground w-full min-w-full" style="--border: gray">
             <thead v-if="!$props.headless">
                 <tr>
                     <th v-for="(column, columnIndex) in columns"
                         :key="columnIndex"
                         :aria-sort="ariaSort(column)"
-                        :style="{ 'width': column.size + 'px' }"
-                        class="text-accent-foreground">
+                        class="text-accent-foreground"
+                        v-bind="column.attrs">
                         <button v-if="column.sortable" type="button" class="inline-flex items-center gap-2" @click="sortBy(column.name)">
                             <component :is="column.headerSlot" v-if="column.headerSlot" :column="column" />
                             <template v-else>{{ column.label }}</template>
@@ -94,7 +94,7 @@ const sortIndicator = (name) => {
 
             <tbody>
                 <tr v-for="(row, rowIndex) in data" :key="rowIndex">
-                    <td v-for="(column, columnIndex) in columns" :key="columnIndex">
+                    <td v-for="(column, columnIndex) in columns" :key="columnIndex" v-bind="column.attrs">
                         <template v-if="column.cellSlot">
                             <component :is="column.cellSlot"
                                        :row-index

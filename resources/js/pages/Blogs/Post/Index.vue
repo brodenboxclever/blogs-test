@@ -6,35 +6,47 @@ import Pagination from '@/components/Pagination.vue';
 import DataTable from '@/components/table/DataTable.vue';
 import DataTableColumn from '@/components/table/DataTableColumn.vue';
 import QuickToggleButton from '@/components/table/QuickToggleButton.vue';
-import DropdownMenu from '@/components/ui/dropdown-menu/DropdownMenu.vue';
-import DropdownMenuContent from '@/components/ui/dropdown-menu/DropdownMenuContent.vue';
-import DropdownMenuItem from '@/components/ui/dropdown-menu/DropdownMenuItem.vue';
-import DropdownMenuTrigger from '@/components/ui/dropdown-menu/DropdownMenuTrigger.vue';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { debounce } from '@/lib/debounce';
 import blogs from '@/routes/blogs';
-import blog from '@/routes/blogs/blog';
-import post from '@/routes/blogs/blog/post';
+
+// Define the incoming props
+defineProps<{
+    blog: {
+        id: number;
+        title?: string;
+    };
+}>();
 
 defineOptions({
-    layout: {
+    layout: (props: any) => ({
         breadcrumbs: [
             {
                 title: 'Blogs',
                 href: blogs.blog.index(),
             },
+            {
+                title: props.blog.title ?? 'Posts',
+                href: blogs.blog.post.index(props.blog.id),
+            },
         ],
-    },
+    }),
 });
 
-const {props} = usePage();
+const page = usePage();
 
-const search = ref(props.filters?.q || '');
+const search = ref(page.props.filters?.q || '');
 watch(search, debounce((q: string) => {
     const data: Record<string, string> = q ? { q } : {};
-    data.sort_by = props.filters?.sort_by;
-    data.sort_direction = props.filters?.sort_direction;
+    data.sort_by = page.props.filters?.sort_by;
+    data.sort_direction = page.props.filters?.sort_direction;
 
-    router.get(blog.index(), data, {
+    router.get(blogs.blog.post.index(page.props.blog.id), data, {
         preserveState: true,
         replace: true,
     });
@@ -53,52 +65,49 @@ watch(search, debounce((q: string) => {
                    placeholder="Search" />
         </label>
 
-        <DataTable :data="$page.props.blogs.data"
+        <DataTable :data="$page.props.posts.data"
                    :sort="$page.props.filters.sort_by"
                    :direction="$page.props.filters.sort_direction">
-            <DataTableColumn v-slot="{row, value}" name="title" sortable>
-                <Link class="link link-hover link-primary" :href="post.index(row.id).url">{{ value }}</Link>
+            <DataTableColumn v-slot="{row, value}" name="title" sortable class="w-200">
+                <Link class="link link-hover link-primary" :href="blogs.blog.post.edit({blog: row.blog.id, post: row.id}).url">{{ value }}</Link>
             </DataTableColumn>
 
-            <DataTableColumn name="posts_count"
-                             label="Posts"
-                             class="text-center"
+            <DataTableColumn v-slot="{value}" name="slug" sortable class="w-0">
+                <code class="min-w-full w-50 block text-xs truncate">/{{ value }}</code>
+            </DataTableColumn>
+
+            <DataTableColumn name="comments_count"
+                             label="Comments"
+                             class="text-center w-0"
                              sortable />
 
             <DataTableColumn name="created_at" label="Created On" sortable class="w-50" />
 
-            <DataTableColumn v-slot="{value, row, column}"
-                             name="is_enabled"
-                             label=""
-                             class="w-0">
-                <QuickToggleButton :value :name="column.name" :url="blog.update(row).url" />
+            <DataTableColumn v-slot="{value, row, column}" name="is_enabled" label="" class="w-0">
+                <QuickToggleButton :value :name="column.name" :url="blogs.blog.post.update({blog: row.blog.id, post: row}).url" />
             </DataTableColumn>
 
             <DataTableColumn v-slot="{row}" name="actions" label="" class="w-0">
                 <DropdownMenu>
                     <DropdownMenuTrigger :as-child="true">
-                        <button aria-label="Blog actions" class="btn btn-ghost p-0 btn-primary">
+                        <button class="btn btn-ghost p-0 btn-primary">
                             <MoreVertical class="block aspect-square" />
                         </button>
                     </DropdownMenuTrigger>
 
                     <DropdownMenuContent align="end">
                         <DropdownMenuItem>
-                            <Link :href="blogs.blog.post.index(row.id).url">Manage Posts</Link>
+                            <Link :href="blogs.blog.post.edit([row.blog.id, row]).url">Manage Post</Link>
                         </DropdownMenuItem>
 
                         <DropdownMenuItem>
-                            <Link :href="blogs.blog.edit(row).url">Manage Blog</Link>
-                        </DropdownMenuItem>
-
-                        <DropdownMenuItem>
-                            <Link :href="blogs.blog.show(row).url">Preview Blog</Link>
+                            <Link :href="blogs.blog.post.show([row.blog.id, row]).url">Preview Post</Link>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </DataTableColumn>
         </DataTable>
 
-        <Pagination :meta="$page.props.blogs.meta" />
+        <Pagination :meta="$page.props.posts.meta" />
     </div>
 </template>

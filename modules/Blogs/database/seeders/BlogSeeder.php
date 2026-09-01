@@ -14,15 +14,15 @@ class BlogSeeder extends Seeder
      */
     public function run(): void
     {
-        $blogs = Blog::factory(5)->create();
-        Post::factory(20)->recycle($blogs)->create();
-        Post::factory(3)->recycle($blogs)->future()->create();
-        Post::factory(2)->recycle($blogs)->past()->create();
+        $blogs = Blog::factory(50)->create();
+        Post::factory(1000)->recycle($blogs)->create();
+        Post::factory(300)->recycle($blogs)->future()->create();
+        Post::factory(200)->recycle($blogs)->past()->create();
 
-        $comments = Comment::factory(25)->recycle(Post::all())->create();
-        $replies = Comment::factory(10)->reply()->recycle($comments)->create();
+        $comments = Comment::factory(2500)->recycle(Post::all())->create();
+        $replies = Comment::factory(1000)->reply()->recycle($comments)->create();
 
-        Comment::factory(10)->reply()->recycle($replies)->create();
-        Comment::factory(5)->unapproved()->recycle(Post::all())->create();
+        Comment::factory(1000)->reply()->recycle($replies)->create();
+        Comment::factory(500)->unapproved()->recycle(Post::all())->create();
     }
 }

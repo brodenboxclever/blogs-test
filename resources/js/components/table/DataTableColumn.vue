@@ -3,7 +3,7 @@
     <span v-if="false" />
 </template>
 <script setup>
-import { inject, onMounted, onUnmounted, onUpdated, reactive, useSlots } from 'vue';
+import { inject, onMounted, onUnmounted, onUpdated, reactive, useAttrs, useSlots } from 'vue';
 import { headline } from '@/lib/str';
 
 const props = defineProps({
@@ -26,6 +26,7 @@ const props = defineProps({
 });
 
 const slots = useSlots();
+const attrs = useAttrs();
 
 const registerColumn = inject('registerColumn');
 const unregisterColumn = inject('unregisterColumn');
@@ -37,6 +38,7 @@ const column = reactive({
     sortable: props.sortable,
     headerSlot: slots.header,
     cellSlot: slots.default,
+    attrs
 });
 
 onMounted(() => {
@@ -51,6 +53,7 @@ onUpdated(() => {
     column.sortable = props.sortable;
     column.headerSlot = slots.header;
     column.cellSlot = slots.default;
+    column.attrs = attrs;
 });
 
 onUnmounted(() => {
