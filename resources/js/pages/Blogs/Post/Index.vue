@@ -13,7 +13,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { debounce } from '@/lib/debounce';
-import blogs from '@/routes/blogs';
+import blogs from '@/routes/namespaced/blogs';
 
 // Define the incoming props
 defineProps<{
@@ -28,11 +28,11 @@ defineOptions({
         breadcrumbs: [
             {
                 title: 'Blogs',
-                href: blogs.blog.index(),
+                href: blogs.blogs.index(),
             },
             {
                 title: props.blog.title ?? 'Posts',
-                href: blogs.blog.post.index(props.blog.id),
+                href: blogs.blogs.posts.index(props.blog.id),
             },
         ],
     }),
@@ -46,7 +46,7 @@ watch(search, debounce((q: string) => {
     data.sort_by = page.props.filters?.sort_by;
     data.sort_direction = page.props.filters?.sort_direction;
 
-    router.get(blogs.blog.post.index(page.props.blog.id), data, {
+    router.get(blogs.blogs.posts.index(page.props.blog.id), data, {
         preserveState: true,
         replace: true,
     });
@@ -69,7 +69,7 @@ watch(search, debounce((q: string) => {
                    :sort="$page.props.filters.sort_by"
                    :direction="$page.props.filters.sort_direction">
             <DataTableColumn v-slot="{row, value}" name="title" sortable class="w-200">
-                <Link class="link link-hover link-primary" :href="blogs.blog.post.edit({blog: row.blog.id, post: row.id}).url">{{ value }}</Link>
+                <Link class="link link-hover link-primary" :href="blogs.blogs.posts.edit({blog: row.blog.id, post: row.id}).url">{{ value }}</Link>
             </DataTableColumn>
 
             <DataTableColumn v-slot="{value}" name="slug" sortable class="w-0">
@@ -84,7 +84,7 @@ watch(search, debounce((q: string) => {
             <DataTableColumn name="created_at" label="Created On" sortable class="w-50" />
 
             <DataTableColumn v-slot="{value, row, column}" name="is_enabled" label="" class="w-0">
-                <QuickToggleButton :value :name="column.name" :url="blogs.blog.post.update({blog: row.blog.id, post: row}).url" />
+                <QuickToggleButton :value :name="column.name" :url="blogs.blogs.posts.update({blog: row.blog.id, post: row}).url" />
             </DataTableColumn>
 
             <DataTableColumn v-slot="{row}" name="actions" label="" class="w-0">
@@ -97,11 +97,11 @@ watch(search, debounce((q: string) => {
 
                     <DropdownMenuContent align="end">
                         <DropdownMenuItem>
-                            <Link :href="blogs.blog.post.edit([row.blog.id, row]).url">Manage Post</Link>
+                            <Link :href="blogs.blogs.posts.edit([row.blog.id, row]).url">Manage Post</Link>
                         </DropdownMenuItem>
 
                         <DropdownMenuItem>
-                            <Link :href="blogs.blog.post.show([row.blog.id, row]).url">Preview Post</Link>
+                            <Link :href="blogs.blogs.posts.show([row.blog.id, row]).url">Preview Post</Link>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

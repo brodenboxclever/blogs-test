@@ -7,9 +7,9 @@ import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
-import blogs from '@/routes/blogs';
+import blogs from '@/routes/namespaced/blogs';
 import type { NavItem } from '@/types';
-import pages from '@/routes/pages';
+import pages from '@/routes/namespaced/pages';
 
 const mainNavItems: NavItem[] = [
     {
@@ -19,12 +19,12 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Pages',
-        href: pages.page.index(),
+        href: pages.pages.index(),
         icon: StickyNote,
     },
     {
         title: 'Blogs',
-        href: blogs.blog.index(),
+        href: blogs.blogs.index(),
         icon: RssIcon,
     },
 ];

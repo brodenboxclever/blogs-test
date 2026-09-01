@@ -3,15 +3,14 @@ import { Settings } from '@lucide/vue';
 import DataTable from '@/components/table/DataTable.vue';
 import DataTableColumn from '@/components/table/DataTableColumn.vue';
 import QuickToggleButton from '@/components/table/QuickToggleButton.vue';
-import pages from '@/routes/pages';
-import { edit, update } from '@/routes/pages/page/index.js';
+import pages from '@/routes/namespaced/pages';
 
 defineOptions({
     layout: {
         breadcrumbs: [
             {
                 title: 'Pages',
-                href: pages.page.index(),
+                href: pages.pages.index(),
             },
         ],
     },
@@ -25,7 +24,7 @@ defineOptions({
                    :direction="$page.props.filters.sort_direction">
             <DataTableColumn v-slot="{row, value}" name="title" sortable>
                 <span class="inline-block" :style="{'width': (row.depth * 10) + 'px'}"></span>
-                <Link class="link link-hover link-primary" :href="edit(row).url">{{ value }}</Link>
+                <Link class="link link-hover link-primary" :href="pages.pages.edit(row).url">{{ value }}</Link>
             </DataTableColumn>
 
             <DataTableColumn v-slot="{value}" name="path" sortable>
@@ -35,7 +34,7 @@ defineOptions({
             <DataTableColumn name="created_at" label="Created On" sortable :size="200" />
 
             <DataTableColumn v-slot="{value, row, column}" name="is_enabled" label="" :size="0">
-                <QuickToggleButton :value :name="column.name" :url="update(row).url" />
+                <QuickToggleButton :value :name="column.name" :url="pages.pages.update(row).url" />
             </DataTableColumn>
 
             <DataTableColumn name="actions" label="" :size="0">

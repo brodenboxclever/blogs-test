@@ -85,7 +85,7 @@ export default defineConfig({
         execOnChange('wayfinder:generate', 'php artisan wayfinder:generate --with-form', [
             'routes/**/*.php',
             'modules/**/routes/**/*.php',
-            'modules/**/routes/**/*.php',
+            'modules/**/app/Providers/*.php',
             'modules/**/app/Models/*.php'
         ])
     ],

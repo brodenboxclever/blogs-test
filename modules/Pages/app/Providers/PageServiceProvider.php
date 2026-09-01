@@ -23,6 +23,6 @@ class PageServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
         $this->mergeConfigFrom(__DIR__.'/../../config/config.php', 'page');
 
-        Route::middleware('web')->as('pages.')->group(__DIR__.'/../../routes/web.php');
+        Route::middleware('web')->as('pages::')->group(__DIR__.'/../../routes/web.php');
     }
 }

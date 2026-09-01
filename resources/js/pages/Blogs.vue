@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import blogs from '@/routes/blogs';
+import blogs from '@/routes/namespaced/blogs';
 
 defineOptions({
     layout: {
         breadcrumbs: [
             {
                 title: 'Blogs',
-                href: blogs.blog.index(),
+                href: blogs.blogs.index(),
             },
         ],
     },

@@ -23,6 +23,6 @@ class BlogServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
         $this->mergeConfigFrom(__DIR__.'/../../config/config.php', 'blog');
 
-        Route::middleware('web')->as('blogs.')->group(__DIR__.'/../../routes/web.php');
+        Route::middleware('web')->name('blogs::')->group(__DIR__.'/../../routes/web.php');
     }
 }

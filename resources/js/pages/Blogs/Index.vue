@@ -11,16 +11,14 @@ import DropdownMenuContent from '@/components/ui/dropdown-menu/DropdownMenuConte
 import DropdownMenuItem from '@/components/ui/dropdown-menu/DropdownMenuItem.vue';
 import DropdownMenuTrigger from '@/components/ui/dropdown-menu/DropdownMenuTrigger.vue';
 import { debounce } from '@/lib/debounce';
-import blogs from '@/routes/blogs';
-import blog from '@/routes/blogs/blog';
-import post from '@/routes/blogs/blog/post';
+import blogs from '@/routes/namespaced/blogs';
 
 defineOptions({
     layout: {
         breadcrumbs: [
             {
                 title: 'Blogs',
-                href: blogs.blog.index(),
+                href: blogs.blogs.index(),
             },
         ],
     },
@@ -34,7 +32,7 @@ watch(search, debounce((q: string) => {
     data.sort_by = props.filters?.sort_by;
     data.sort_direction = props.filters?.sort_direction;
 
-    router.get(blog.index(), data, {
+    router.get(blogs.blogs.index(), data, {
         preserveState: true,
         replace: true,
     });
@@ -57,7 +55,7 @@ watch(search, debounce((q: string) => {
                    :sort="$page.props.filters.sort_by"
                    :direction="$page.props.filters.sort_direction">
             <DataTableColumn v-slot="{row, value}" name="title" sortable>
-                <Link class="link link-hover link-primary" :href="post.index(row.id).url">{{ value }}</Link>
+                <Link class="link link-hover link-primary" :href="blogs.blogs.posts.index(row.id).url">{{ value }}</Link>
             </DataTableColumn>
 
             <DataTableColumn name="posts_count"
@@ -71,7 +69,7 @@ watch(search, debounce((q: string) => {
                              name="is_enabled"
                              label=""
                              class="w-0">
-                <QuickToggleButton :value :name="column.name" :url="blog.update(row).url" />
+                <QuickToggleButton :value :name="column.name" :url="blogs.blogs.update(row).url" />
             </DataTableColumn>
 
             <DataTableColumn v-slot="{row}" name="actions" label="" class="w-0">
@@ -84,15 +82,15 @@ watch(search, debounce((q: string) => {
 
                     <DropdownMenuContent align="end">
                         <DropdownMenuItem>
-                            <Link :href="blogs.blog.post.index(row.id).url">Manage Posts</Link>
+                            <Link :href="blogs.blogs.posts.index(row.id).url">Manage Posts</Link>
                         </DropdownMenuItem>
 
                         <DropdownMenuItem>
-                            <Link :href="blogs.blog.edit(row).url">Manage Blog</Link>
+                            <Link :href="blogs.blogs.edit(row).url">Manage Blog</Link>
                         </DropdownMenuItem>
 
                         <DropdownMenuItem>
-                            <Link :href="blogs.blog.show(row).url">Preview Blog</Link>
+                            <Link :href="blogs.blogs.show(row).url">Preview Blog</Link>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
