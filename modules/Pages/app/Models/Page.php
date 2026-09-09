@@ -2,7 +2,7 @@
 
 namespace Modules\Pages\Models;
 
-use App\Concerns\Traits\Models\HasNonPrimaryUuid;
+use App\Traits\Models\HasNonPrimaryUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;

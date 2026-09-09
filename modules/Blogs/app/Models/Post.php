@@ -2,7 +2,8 @@
 
 namespace Modules\Blogs\Models;
 
-use App\Concerns\Traits\Models\HasNonPrimaryUuid;
+use App\Casts\AsFile;
+use App\Traits\Models\HasNonPrimaryUuid;
 use Database\Factories\PostFactory;
 use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,6 +27,7 @@ class Post extends Model
         'is_comments_enabled' => 'boolean',
         'published_at' => 'datetime',
         'unpublished_at' => 'datetime',
+        'image' => AsFile::class,
     ];
 
     /**
