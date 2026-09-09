@@ -5,7 +5,7 @@ namespace Modules\Blogs\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Modules\Blogs\Http\Requests\StoreBlogRequest;
+use Modules\Blogs\Http\Requests\BlogRequest;
 use Modules\Blogs\Http\Requests\UpdateBlogRequest;
 use Modules\Blogs\Models\Blog;
 
@@ -47,15 +47,17 @@ class BlogController extends Controller
      */
     public function create()
     {
-        //
+        return inertia('Blogs/Create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreBlogRequest $request)
+    public function store(BlogRequest $request)
     {
-        //
+        Blog::create($request->safe()->all());
+
+        return to_route('blogs::blogs.index')->with('success', 'Blog successfully created.');
     }
 
     /**
@@ -63,11 +65,7 @@ class BlogController extends Controller
      */
     public function show(Blog $blog)
     {
-        $blogs = Blog::paginate(10)->toResourceCollection();
-
-        return inertia('Blogs/Show', [
-            'blog' => $blog,
-        ]);
+        return inertia('Blogs/Show', ['blog' => $blog]);
     }
 
     /**
@@ -75,7 +73,7 @@ class BlogController extends Controller
      */
     public function edit(Blog $blog)
     {
-        //
+        return inertia('Blogs/Edit', ['blog' => $blog]);
     }
 
     /**
@@ -85,7 +83,7 @@ class BlogController extends Controller
     {
         $blog->update($request->validated());
 
-        return to_route('blogs.blog.index');
+        return to_route('blogs::blogs.index')->with('success', 'Blog successfully updated.');
     }
 
     /**
@@ -93,6 +91,8 @@ class BlogController extends Controller
      */
     public function destroy(Blog $blog)
     {
-        //
+        $blog->delete($blog);
+
+        return to_route('blogs::blogs.index')->with('success', 'Blog successfully trashed.');
     }
 }

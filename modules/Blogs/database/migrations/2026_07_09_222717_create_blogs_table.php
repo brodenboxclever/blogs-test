@@ -17,8 +17,6 @@ return new class extends Migration
 
             $table->string('title');
 
-            $table->image()->nullable();
-
             $table->readonly();
 
             $table->order();

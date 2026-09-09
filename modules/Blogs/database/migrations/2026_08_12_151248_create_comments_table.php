@@ -26,6 +26,8 @@ return new class extends Migration
 
             $table->boolean('is_spam')->default(false);
             $table->boolean('is_approved')->default(false);
+            $table->timestamp('approved_at')->nullable();
+            $table->timestamp('approved_by')->nullable();
 
             $table->clientSession();
 

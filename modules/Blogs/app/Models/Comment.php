@@ -12,4 +12,15 @@ class Comment extends Model
 {
     /** @use HasFactory<CommentFactory> */
     use HasFactory;
+
+    protected $casts = [
+        'is_approved' => 'boolean',
+        'is_spam' => 'boolean',
+        'approved_at' => 'datetime',
+    ];
+
+    public function post()
+    {
+        return $this->belongsTo(Post::class);
+    }
 }
