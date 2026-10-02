@@ -86,7 +86,8 @@ export default defineConfig({
             'routes/**/*.php',
             'modules/**/routes/**/*.php',
             'modules/**/app/Providers/*.php',
-            'modules/**/app/Models/*.php'
+            'modules/**/app/Models/*.php',
+            'modules/**/app/Http/Controllers/*.php'
         ])
     ],
 
