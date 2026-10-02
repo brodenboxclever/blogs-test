@@ -12,6 +12,7 @@ import DropdownMenuItem from '@/components/ui/dropdown-menu/DropdownMenuItem.vue
 import DropdownMenuTrigger from '@/components/ui/dropdown-menu/DropdownMenuTrigger.vue';
 import { debounce } from '@/lib/debounce';
 import blogs from '@/routes/namespaced/blogs';
+import { bulkUpdate } from '@/routes/namespaced/blogs/blogs';
 
 defineOptions({
     layout: {
@@ -40,6 +41,10 @@ watch(search, debounce((q: string) => {
 </script>
 
 <template>
+    <div v-if="$page.props.errors">
+        <pre>{{ $page.props.errors }}</pre>
+    </div>
+
     <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
         <label class="input">
             <Search />
@@ -55,13 +60,16 @@ watch(search, debounce((q: string) => {
                    :sort="$page.props.filters.sort_by"
                    :direction="$page.props.filters.sort_direction">
             <DataTableColumn v-slot="{row, value}" name="title" sortable>
-                <Link class="link link-hover link-primary" :href="blogs.blogs.posts.index(row.id).url">{{ value }}</Link>
+                <Link class="link link-hover link-primary" :href="blogs.blogs.edit(row.id).url">{{ value }}</Link>
             </DataTableColumn>
 
-            <DataTableColumn name="posts_count"
+            <DataTableColumn v-slot="{row, value}"
+                             name="posts_count"
                              label="Posts"
                              class="text-center"
-                             sortable />
+                             sortable>
+                <Link class="link link-hover link-primary" :href="blogs.blogs.posts.index(row.id).url">{{ value }}</Link>
+            </DataTableColumn>
 
             <DataTableColumn name="created_at" label="Created On" sortable class="w-50" />
 
@@ -69,7 +77,12 @@ watch(search, debounce((q: string) => {
                              name="is_enabled"
                              label=""
                              class="w-0">
-                <QuickToggleButton :value :name="column.name" :url="blogs.blogs.update(row).url" />
+                <QuickToggleButton :key-value="row.id"
+                                   key-name="uuid"
+                                   model-name="blogs"
+                                   :value
+                                   :name="column.name"
+                                   :url="bulkUpdate().url" />
             </DataTableColumn>
 
             <DataTableColumn v-slot="{row}" name="actions" label="" class="w-0">
