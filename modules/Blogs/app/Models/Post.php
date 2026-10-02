@@ -3,6 +3,7 @@
 namespace Modules\Blogs\Models;
 
 use App\Casts\AsFile;
+use App\Traits\Models\HasFiles;
 use App\Traits\Models\HasNonPrimaryUuid;
 use Database\Factories\PostFactory;
 use Illuminate\Database\Eloquent\Attributes\Table;
@@ -17,6 +18,7 @@ class Post extends Model
     /** @use HasFactory<PostFactory> */
     use HasFactory;
 
+    use HasFiles;
     use HasNonPrimaryUuid;
     use Prunable, SoftDeletes;
 
