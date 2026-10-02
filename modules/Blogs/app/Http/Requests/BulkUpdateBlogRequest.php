@@ -4,8 +4,9 @@ namespace Modules\Blogs\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Modules\Blogs\Models\Blog;
 
-class UpdateBlogRequest extends FormRequest
+class BulkUpdateBlogRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +23,16 @@ class UpdateBlogRequest extends FormRequest
      */
     public function rules(): array
     {
+        $model = (new Blog);
+        $keyName = $model->getRouteKeyName();
+        $tableName = $model->getTable();
+
         return [
-            'is_enabled' => 'boolean|nullable',
+            $tableName => 'required|array|min:1',
+            $tableName.'.*' => 'required|array',
+            $tableName.'.*.'.$keyName => 'required|exists:'.$tableName.','.$keyName,
+            $tableName.'.*.is_enabled' => 'boolean',
+            $tableName.'.*.order' => 'integer|min:1',
         ];
     }
 }

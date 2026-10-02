@@ -23,7 +23,8 @@ class BlogRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string',
+            'title' => 'required|min:4|max:100|string',
+            'is_enabled' => 'required|boolean',
         ];
     }
 }

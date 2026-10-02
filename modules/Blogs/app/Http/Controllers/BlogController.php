@@ -3,10 +3,13 @@
 namespace Modules\Blogs\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use DB;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Modules\Blogs\Http\Requests\BlogRequest;
-use Modules\Blogs\Http\Requests\UpdateBlogRequest;
+use Modules\Blogs\Http\Requests\BulkUpdateBlogRequest;
 use Modules\Blogs\Models\Blog;
 
 class BlogController extends Controller
@@ -79,11 +82,49 @@ class BlogController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateBlogRequest $request, Blog $blog)
+    public function update(BlogRequest $request, Blog $blog)
     {
+        dd('test');
         $blog->update($request->validated());
 
         return to_route('blogs::blogs.index')->with('success', 'Blog successfully updated.');
+    }
+
+    /**
+     * Update multiple resources in storage.
+     */
+    public function bulkUpdate(BulkUpdateBlogRequest $request)
+    {
+        $model = (new Blog);
+        $keyName = $model->getRouteKeyName();
+        $tableName = $model->getTable();
+
+        $validated = $request->validated();
+
+        try {
+            DB::transaction(function () use ($validated, $keyName) {
+                foreach ($validated['blogs'] as $item) {
+
+                    // Extract update attributes excluding the 'id' key
+                    $attributes = collect($item)->except($keyName)->filter(fn ($value) => $value !== null)->toArray();
+
+                    if (! empty($attributes)) {
+                        $blog = Blog::find($item[$keyName]);
+                    }
+                    if (! empty($blog)) {
+                        $blog->update($attributes);
+                    } else {
+                        throw new Exception("Blog ID {$item[$keyName]} does not exist.");
+                    }
+                }
+            });
+        } catch (Exception $e) {
+            throw ValidationException::withMessages([
+                $tableName => ['Failed to perform bulk update: '.$e->getMessage()],
+            ]);
+        }
+
+        return to_route('blogs::blogs.index')->with('success', 'Blogs successfully updated.');
     }
 
     /**
