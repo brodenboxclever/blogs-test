@@ -5,6 +5,9 @@ import { ref } from 'vue';
 
 const props = defineProps<{
     url: string,
+    modelName: string,
+    keyValue: string,
+    keyName: string,
     value: boolean,
     name: string,
 }>();
@@ -13,7 +16,12 @@ const value = ref(props.value);
 
 const toggle = () => {
     router.patch(props.url, {
-        [props.name]: ! value.value
+        [props.modelName]: [
+            {
+                [props.keyName]: props.keyValue,
+                [props.name]: ! value.value,
+            }
+        ]
     });
     value.value = ! value.value;
 };
